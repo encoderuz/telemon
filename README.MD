@@ -32,6 +32,8 @@ You can send messages in two ways, depending on whether `chat_id` is defined in 
 Use `.to(topic_id)` — the `chat_id` will be automatically read from the config:
 
 ```rust
+use telemon::Telemon;
+
 Telemon::send("✅ Success").to(34);
 ```
 
@@ -40,6 +42,8 @@ Telemon::send("✅ Success").to(34);
 You must provide the `chat_id` as the first value in a tuple:
 
 ```rust
+use telemon::Telemon;
+
 Telemon::send("🚨 Error occurred").to((-1002483629475, 34));
 ```
 
