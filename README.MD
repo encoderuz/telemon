@@ -17,11 +17,19 @@ Create a `telemon.toml` file in your project root:
 token = "BOT_TOKEN"          # Your Telegram bot token
 chat_id = -1001234567890     # (Optional) Telegram group chat ID
 show_logs = false            # Set to true to display logs in console
+parse_mode = "MarkdownV2"      # (Optional) Message format: Markdown, HTML, or empty for plain text
 ```
 
 - `token`: The bot token provided by BotFather
 - `chat_id`: (Optional) The group chat ID where messages will be sent
 - `show_logs`: If true, logs will also be printed to the terminal
+- `parse_mode`: Defines the message format sent to Telegram. Accepted values are: `Markdown`, `MarkdownV2`, `Html`
+
+Markdown – Enables Markdown formatting
+
+HTML – Enables HTML formatting
+
+Leave empty or omit for plain text
 
 ## 📤 Usage
 
