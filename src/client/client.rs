@@ -12,6 +12,7 @@ struct SendMessagePayload<'a> {
     chat_id: i64,
     text: &'a str,
     message_thread_id: i64,
+    parse_mode: &'a str,
 }
 
 impl TelegramClient {
@@ -21,7 +22,6 @@ impl TelegramClient {
             token: CONFIG.token.clone(),
         }
     }
-
     pub fn send_message(
         &self,
         chat_id: i64,
@@ -29,11 +29,11 @@ impl TelegramClient {
         message: &str,
     ) -> Result<(), Box<dyn std::error::Error>> {
         let url = format!("https://api.telegram.org/bot{}/sendMessage", self.token);
-
         let payload = SendMessagePayload {
             chat_id,
-            text: message,
+            text:  &message,
             message_thread_id: thread_id,
+            parse_mode: &CONFIG.parse_mode,
         };
 
         let res = self.client.post(&url).json(&payload).send()?;
