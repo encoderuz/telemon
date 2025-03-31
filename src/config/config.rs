@@ -9,7 +9,8 @@ pub struct Config {
     pub chat_id: Option<i64>,
     #[serde(default)]
     pub show_logs: bool,
-    pub parse_mode: String,
+    pub parse_mode: Option<String>,
+    pub group_id: Option<i64>,
 }
 impl Config {
     pub fn get() -> Self {
@@ -18,6 +19,7 @@ impl Config {
             chat_id: CONFIG.chat_id,
             show_logs: CONFIG.show_logs,
             parse_mode: CONFIG.parse_mode.clone(),
+            group_id: CONFIG.group_id,
         }
     }
 }

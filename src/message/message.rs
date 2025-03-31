@@ -19,7 +19,7 @@ impl<'a> TelemonMessage<'a> {
         match target.into() {
             ToTarget::Topic(topic_id) => {
                 if let Some(chat_id) = CONFIG.chat_id {
-                    let _ = client.send_message(chat_id, topic_id, self.text);
+                    let _ = client.send_to_topic(chat_id, topic_id, self.text);
                 } else {
                     if CONFIG.show_logs {
                         eprintln!(
@@ -29,7 +29,7 @@ impl<'a> TelemonMessage<'a> {
                 }
             }
             ToTarget::ChatWithTopic(chat_id, topic_id) => {
-                let _ = match client.send_message(chat_id, topic_id, self.text) {
+                let _ = match client.send_to_topic(chat_id, topic_id, self.text) {
                     Ok(data) => {
                         if CONFIG.show_logs {
                             println!("{:?}", data);
@@ -42,6 +42,25 @@ impl<'a> TelemonMessage<'a> {
                     }
                 };
             }
+        }
+    }
+    pub fn to_group(self) {
+        let client = TelegramClient::new();
+        if let Some(group_id) = CONFIG.group_id.clone() {
+            let _ = match client.send_to_group(group_id, self.text) {
+                Ok(_) => {
+                    if CONFIG.show_logs {
+                        println!("- ✅ Message sent to group \n- ℹ️Group id: {}\n- ⚠️ You can turn off these logs by setting show_logs = false in the telemon.toml file.", &group_id);
+                    }
+                }
+                Err(err) => {
+                    if CONFIG.show_logs {
+                        eprintln!("❌ Error sending to group: {:?}\n ⚠️ You can turn off these logs by setting show_logs = false in the telemon.toml file.", err);
+                    }
+                }
+            };
+        } else if CONFIG.show_logs {
+            eprintln!("⚠️ group_id is missing in the config file. \n👀Make sure the group_id is set in the telemon.toml file. \n");
         }
     }
 }

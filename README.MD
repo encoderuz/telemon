@@ -17,7 +17,7 @@ Create a `telemon.toml` file in your project root:
 token = "BOT_TOKEN"          # Your Telegram bot token
 chat_id = -1001234567890     # (Optional) Telegram group chat ID
 show_logs = false            # Set to true to display logs in console
-parse_mode = "MarkdownV2"      # (Optional) Message format: Markdown, HTML, or empty for plain text
+parse_mode = "HTML"      # (Optional) Message format: Markdown, HTML, or empty for plain text
 ```
 
 - `token`: The bot token provided by BotFather

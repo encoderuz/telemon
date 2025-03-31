@@ -11,7 +11,7 @@ pub struct TelegramClient {
 struct SendMessagePayload<'a> {
     chat_id: i64,
     text: &'a str,
-    message_thread_id: i64,
+    message_thread_id: Option<i64>,
     parse_mode: &'a str,
 }
 
@@ -22,34 +22,49 @@ impl TelegramClient {
             token: CONFIG.token.clone(),
         }
     }
-    pub fn send_message(
+    fn send(
         &self,
         chat_id: i64,
-        thread_id: i64,
         message: &str,
+        message_thread_id: Option<i64>,
     ) -> Result<(), Box<dyn std::error::Error>> {
         let url = format!("https://api.telegram.org/bot{}/sendMessage", self.token);
         let payload = SendMessagePayload {
             chat_id,
-            text:  &message,
-            message_thread_id: thread_id,
-            parse_mode: &CONFIG.parse_mode,
+            text: message,
+            message_thread_id,
+            parse_mode: &CONFIG.parse_mode.as_deref().unwrap_or("HTML"),
         };
 
         let res = self.client.post(&url).json(&payload).send()?;
         if res.status().is_success() {
             if CONFIG.show_logs {
-                println!("{:?}", res);
+                println!("𝌮 {:?}", res);
             }
             Ok(())
         } else {
-            let response = res;
-            let status = &response.status();
-            let text = response.text()?;
+            let status = res.status();
+            let text = res.text()?;
             if CONFIG.show_logs {
                 eprintln!("Telegram error ({}): {}", status, text);
             }
             Err(format!("Telegram error: {}", text).into())
         }
+    }
+    pub fn send_to_topic(
+        &self,
+        chat_id: i64,
+        thread_id: i64,
+        message: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        self.send(chat_id, message, Some(thread_id))
+    }
+
+    pub fn send_to_group(
+        &self,
+        chat_id: i64,
+        message: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        self.send(chat_id, message, None)
     }
 }
