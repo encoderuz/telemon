@@ -81,6 +81,8 @@ tokio::task::spawn_blocking(move || {
     Telemon::send(&reply).to(2)
 }).await?;
 ```
+![Telemon demo](telemon_demo.gif)
+
 ## 📄 License
 
 MIT License
