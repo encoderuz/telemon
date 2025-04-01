@@ -69,6 +69,18 @@ In this case:
 - If `show_logs = false`, logs will be silent.
 - `topic_id` refers to the forum topic ID inside the Telegram group.
 
+
+### ✅ Correct Usage in Async Code
+To safely call a blocking function such as `Telemon::send` inside an async function, wrap it with `tokio::task::spawn_blocking`. This runs the operation on a separate thread, ensuring that your async runtime remains non-blocked:
+```rust
+use telemon::Telemon;
+
+let reply = "Hello from async!";
+
+tokio::task::spawn_blocking(move || {
+    Telemon::send(&reply).to(2)
+}).await?;
+```
 ## 📄 License
 
 MIT License
