@@ -81,7 +81,9 @@ tokio::task::spawn_blocking(move || {
     Telemon::send(&reply).to(2)
 }).await?;
 ```
-![Telemon demo](telemon_demo.gif)
+![Telemon send to topic](telemon_send.png)
+![Telemon send to topic](telemon_send.png)
+![Telemon async block](telemon_async_block.png)
 
 ## 📄 License
 
